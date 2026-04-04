@@ -1,0 +1,4 @@
+#Features
+Pagination ✅
+Autocomplete search bar with debouncing
+
