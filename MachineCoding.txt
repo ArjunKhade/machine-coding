@@ -1,4 +1,4 @@
 #Features
 Pagination ✅
-Autocomplete search bar with debouncing
+Autocomplete search bar with debouncing ✅
 
