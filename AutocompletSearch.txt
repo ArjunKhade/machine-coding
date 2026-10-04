@@ -1,0 +1,52 @@
+import { useEffect, useState } from "react";
+import "./styles.css";
+
+export default function App() {
+  const [input, setInput] = useState("");
+  const [recipes, setRecipes] = useState([]);
+  const [show, setShow] = useState(false);
+  const [cache, setCache] = useState({});
+
+  const fetchData = async () => {
+    if (cache[input]) {
+      console.log("CACHE RETURN");
+      setRecipes(cache[input]);
+      return;
+    }
+
+    const data = await fetch("https://dummyjson.com/recipes/search?q=" + input);
+    const json = await data.json();
+    setRecipes(json?.recipes);
+    setCache((prev) => ({ ...prev, [input]: json?.recipes }));
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(fetchData, 300);
+    return () => clearTimeout(timer);
+  }, [input]);
+
+  return (
+    <div className="App">
+      <h1>Autocomplete Search</h1>
+
+      <div className="box">
+        <input
+          type="text"
+          className="search-input"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onBlur={() => setShow(false)}
+          onFocus={() => setShow(true)}
+        />
+      </div>
+
+      {show && (
+        <div className="result">
+          {recipes.map((r) => (
+            <span key={r.id}> {r.name} </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
